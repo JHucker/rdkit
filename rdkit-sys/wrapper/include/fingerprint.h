@@ -4,7 +4,8 @@
 
 namespace RDKit {
     using ExplicitBitVect = ::ExplicitBitVect;
-    std::shared_ptr<ExplicitBitVect> fingerprint_mol(const std::shared_ptr<ROMol> &mol);
+    std::shared_ptr<ExplicitBitVect> get_rdkit_fingerprint(const std::shared_ptr<ROMol> &mol);
+    std::shared_ptr<ExplicitBitVect> get_morgan_fingerprint(const std::shared_ptr<ROMol> &mol, long unsigned int radius, long unsigned int n_bits);
     std::shared_ptr<ExplicitBitVect> copy_explicit_bit_vect(const std::shared_ptr<ExplicitBitVect> &orig);
     unsigned int get_num_on_bits(const std::shared_ptr<ExplicitBitVect> &bitvect);
 

@@ -73,8 +73,19 @@ impl ROMol {
         RWMol { ptr }
     }
 
-    pub fn fingerprint(&self) -> Fingerprint {
-        let ptr = fingerprint_ffi::fingerprint_mol(&self.ptr);
+    pub fn rdkit_fingerprint(&self) -> Fingerprint {
+        let ptr = fingerprint_ffi::get_rdkit_fingerprint(&self.ptr);
+        Fingerprint::new(ptr)
+    }
+
+    /// # Panics
+    ///
+    /// Will panic if `n_bits` is less than 64
+    pub fn morgan_fingerprint(&self, radius: usize, n_bits: usize) -> Fingerprint {
+        if n_bits < 64 {
+            panic!("minimum number of `n_bits` is 64!")
+        }
+        let ptr = fingerprint_ffi::get_morgan_fingerprint(&self.ptr, radius, n_bits);
         Fingerprint::new(ptr)
     }
 

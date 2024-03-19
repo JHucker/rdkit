@@ -297,7 +297,7 @@ fn test_building_rwmol_from_smarts() {
 fn test_smiles_write_rooted_at_atom() {
     let input_smi = "COc1cc(OC)c2c(c1)OC1(c3ccc(OC)c(OC)c3)C(c3ccccc3)CC(O)C21O";
     let ro_mol = ROMol::from_smiles(input_smi).unwrap();
-    let canonical_smi = ro_mol.as_smiles();
+    let canonical_smi = ro_mol.as_smiles().unwrap();
 
     let mut params = SmilesWriteParams::default();
     let another_can_smi = ro_mol.as_smiles_with_params(&params).unwrap();

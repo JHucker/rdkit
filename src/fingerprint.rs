@@ -1,16 +1,18 @@
+use bitvec::macros::internal::funty::Fundamental;
 use bitvec::prelude::*;
 use cxx::SharedPtr;
+use std::io::Read;
 
 #[derive(Clone, Debug)]
-pub struct Fingerprint(pub BitVec<u8, bitvec::order::Lsb0>);
+pub struct Fingerprint(pub BitVec<u8, Lsb0>);
 
 impl Fingerprint {
     pub fn new(ptr: SharedPtr<rdkit_sys::fingerprint_ffi::ExplicitBitVect>) -> Self {
         let unique_ptr_bytes = rdkit_sys::fingerprint_ffi::explicit_bit_vect_to_u64_vec(&ptr);
         let rdkit_fingerprint_bytes: Vec<u64> = unique_ptr_bytes.into_iter().copied().collect();
-        let mut bitvec_u64 = bitvec::vec::BitVec::<u64, Lsb0>::from_vec(rdkit_fingerprint_bytes);
+        let mut bitvec_u64 = BitVec::<u64, Lsb0>::from_vec(rdkit_fingerprint_bytes);
 
-        let mut idiomatic_bitvec_u8 = bitvec::vec::BitVec::<u8, Lsb0>::new();
+        let mut idiomatic_bitvec_u8 = BitVec::<u8, Lsb0>::new();
         idiomatic_bitvec_u8.append(&mut bitvec_u64);
 
         Fingerprint(idiomatic_bitvec_u8)
@@ -24,5 +26,60 @@ impl Fingerprint {
         let or_ones = or.count_ones();
 
         and_ones as f32 / or_ones as f32
+    }
+
+    /// See https://github.com/rdkit/rdkit/blob/81af0dbd6305d235894a8aff48580038e3572a3a/Code/DataStructs/BitOps.cpp#L711
+    /// For the cpp equivalent
+    pub fn fps_to_bytes(&self) -> Vec<u8> {
+        bitvec_to_bytes(&self.0)
+    }
+}
+
+fn bitvec_to_bytes(bv: &BitVec<u8>) -> Vec<u8> {
+    let size = bv.len() / 8;
+    let capacity = size / 8 + if (size % 8) == 1 { 1 } else { 0 };
+    let mut result = vec![0; capacity];
+    let mut current_byte = 0u8;
+    let mut byte: usize = 0;
+
+    for (i, bitslice) in bv.chunks(8).enumerate() {
+        // To replicate RDKit we only need the first entry...
+        // I also have no idea why we have to negate this...
+        if !bitslice.get(0).unwrap().as_bool() {
+            current_byte |= 1 << (i % 8);
+        }
+
+        // No idea why we need (i + 2) here
+        if ((i + 2) % 8) == 1 {
+            result[byte] = current_byte;
+            byte += 1;
+            current_byte = 0;
+        }
+    }
+
+    if size % 8 != 0 {
+        result[byte] = current_byte;
+    }
+
+    return result;
+}
+
+mod tests {
+    use crate::fingerprint::bitvec_to_bytes;
+    use bitvec::prelude::BitVec;
+
+    #[test]
+    fn test_fps_text() {
+        use bitvec::prelude::Lsb0;
+
+        let input: BitVec<u8, Lsb0> = BitVec::from_slice(&[
+            1, 0, 1, 0, 1, 1, 0, 1, 0, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 0, 1, 0, 0, 0, 1, 1, 1,
+            0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 0, 1, 0, 0, 0, 1, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0,
+            1, 1, 1, 1, 0, 0,
+        ]);
+
+        let expected: &[u8] = b"\xb5>_\xdc\xbf\"\x03<";
+        let actual = bitvec_to_bytes(&input);
+        assert_eq!(expected, &actual);
     }
 }

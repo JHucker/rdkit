@@ -5,7 +5,7 @@ use rdkit::ROMol;
 fn test_fingerprint() {
     let smiles = "c1ccccc1CCCCCCCC";
     let mol = ROMol::from_smiles(smiles).unwrap();
-    let fingerprint = mol.fingerprint();
+    let fingerprint = mol.rdkit_fingerprint();
     let expected = bitvec![
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0,
@@ -84,9 +84,41 @@ fn test_fingerprint() {
 #[test]
 fn test_tanimoto() {
     let mol = ROMol::from_smiles("CCC=O").unwrap();
-    let fingerprint = mol.fingerprint();
+    let fingerprint = mol.rdkit_fingerprint();
     let mol_two = ROMol::from_smiles("CCC=N").unwrap();
-    let fingerprint_two = mol_two.fingerprint();
+    let fingerprint_two = mol_two.rdkit_fingerprint();
     let distance = fingerprint.tanimoto_distance(&fingerprint_two);
     assert_eq!(distance, 0.25);
+}
+
+/*
+from rdkit import Chem
+from rdkit.Chem.rdMolDescriptors import GetMorganFingerprintAsBitVect
+smiles = "C[C@]12C=CC(=O)C=C1C(Cl)=C[C@@H]1[C@@H]2[C@@H](O)C[C@@]2(C)[C@H]1CC[C@]2(O)C(=O)CO"
+mol = Chem.MolFromSmiles(smiles)
+fp = GetMorganFingerprintAsBitVect(mol, 2, 64)
+print(fp.ToList())      # [1, 0, 1, 0, 1, 1, 0, 1, 0, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 0, 1, 0, 0, 0, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 0, 1, 0, 0, 0, 1, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0]
+print(fp.GetNumBits())  # 64
+print(fp.GetBit(0))     # True
+print(fp.GetBit(1))     # False
+
+from rdkit.DataStructs.cDataStructs import BitVectToBinaryText
+
+bin_text = BitVectToBinaryText(fp)
+print(bin_text)     # b'\xb5>_\xdc\xbf"\x03<'
+*/
+
+#[test]
+fn test_morgan_fingerprint() {
+    let mol = ROMol::from_smiles(
+        "C[C@]12C=CC(=O)C=C1C(Cl)=C[C@@H]1[C@@H]2[C@@H](O)C[C@@]2(C)[C@H]1CC[C@]2(O)C(=O)CO",
+    )
+    .unwrap();
+    let fingerprint = mol.morgan_fingerprint(2, 64);
+    let expected = bitvec![
+        1, 0, 1, 0, 1, 1, 0, 1, 0, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 0, 1, 0, 0, 0, 1, 1, 1, 0,
+        1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 0, 1, 0, 0, 0, 1, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1,
+        1, 1, 0, 0
+    ];
+    assert_eq!(expected, fingerprint.0);
 }
