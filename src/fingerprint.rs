@@ -59,5 +59,3 @@ impl Fingerprint {
         result
     }
 }
-
-
