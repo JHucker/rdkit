@@ -122,3 +122,16 @@ fn test_morgan_fingerprint() {
     ];
     assert_eq!(expected, fingerprint.0);
 }
+
+
+#[test]
+fn fps_2_binary() {
+    let mol = ROMol::from_smiles(
+        "C[C@]12C=CC(=O)C=C1C(Cl)=C[C@@H]1[C@@H]2[C@@H](O)C[C@@]2(C)[C@H]1CC[C@]2(O)C(=O)CO",
+    )
+        .unwrap();
+    let fingerprint = mol.morgan_fingerprint(2, 64);
+    let expected: &[u8] = b"\xb5>_\xdc\xbf\"\x03<";
+    let actual = fingerprint.fps_to_bytes();
+    assert_eq!(expected, &actual);
+}
