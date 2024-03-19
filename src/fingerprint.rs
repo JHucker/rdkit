@@ -39,7 +39,6 @@ impl Fingerprint {
         let mut byte: usize = 0;
 
         for (i, bit_ref) in bv.iter().enumerate() {
-            // To replicate RDKit we only need the first entry...
             // I also have no idea why we have to negate this...
             if !bit_ref.as_bool() {
                 current_byte |= 1 << (i % 8);
