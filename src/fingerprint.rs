@@ -1,5 +1,4 @@
-use bitvec::macros::internal::funty::Fundamental;
-use bitvec::prelude::*;
+use bitvec::{macros::internal::funty::Fundamental, prelude::*};
 use cxx::SharedPtr;
 
 #[derive(Clone, Debug)]
