@@ -6,13 +6,13 @@ the C++ API via bindings from [rdkit-sys](https://crates.io/crate/rdkit-sys).
 
 This fork and branch contain the following deviations and / or new features compared to the original repo:
 
+Comparison to Original Repo
+---
  - RDKit changes
-   - Exposed SMILES writing params, to allow generation of randomised SMILES
-   - Ensure that Mol -> SMILES is fallible
+   - Exposed SMILES writing params, to allow generation of randomised SMILES ([PR](https://github.com/rdkit-rs/rdkit/pull/13), [issue](https://github.com/rdkit-rs/rdkit-sys/issues/11)).
+   - Ensure that Mol -> SMILES is fallible ([PR](https://github.com/rdkit-rs/rdkit/pull/24), [issue](https://github.com/rdkit-rs/rdkit/issues/25))
  - Other
    - Added .pre-commit-config.yaml
-   -
-
 
 Prerequisites
 ---
