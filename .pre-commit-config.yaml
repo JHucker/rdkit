@@ -1,0 +1,34 @@
+repos:
+  -   repo: https://github.com/pre-commit/pre-commit-hooks
+      rev: v4.4.0
+      hooks:
+        -   id: check-byte-order-marker
+        -   id: check-case-conflict
+        -   id: check-merge-conflict
+        -   id: check-symlinks
+        -   id: check-added-large-files
+            exclude: benches/resources/EFAA.smi.tar.gz
+        -   id: check-yaml
+        -   id: detect-private-key
+        -   id: name-tests-test
+        -   id: end-of-file-fixer
+        -   id: mixed-line-ending
+        -   id: trailing-whitespace
+
+  -   repo: local
+      hooks:
+        # formatting
+        - id: cargo-format
+          name: cargo +nightly fmt
+          entry: cargo +nightly fmt
+          pass_filenames: false
+          language: system
+          types: [ rust ]
+
+        # compiler check
+        - id: cargo-check
+          name: cargo check
+          entry: cargo check
+          pass_filenames: false
+          language: system
+          types: [ rust ]

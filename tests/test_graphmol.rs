@@ -306,6 +306,7 @@ fn test_build_romol_from_really_bad_smiles() {
     assert!(romol.is_err());
 }
 
+#[test]
 fn test_smiles_write_rooted_at_atom() {
     let input_smi = "COc1cc(OC)c2c(c1)OC1(c3ccc(OC)c(OC)c3)C(c3ccccc3)CC(O)C21O";
     let ro_mol = ROMol::from_smiles(input_smi).unwrap();
