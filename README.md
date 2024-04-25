@@ -12,7 +12,8 @@ Comparison to Original Repo
    - Exposed SMILES writing params, to allow generation of randomised SMILES ([PR](https://github.com/rdkit-rs/rdkit/pull/13), [issue](https://github.com/rdkit-rs/rdkit-sys/issues/11)).
    - Ensure that Mol -> SMILES is fallible ([PR](https://github.com/rdkit-rs/rdkit/pull/24), [issue](https://github.com/rdkit-rs/rdkit/issues/25))
  - Other
-   - Added .pre-commit-config.yaml
+   - Added `.pre-commit-config.yaml`
+   - Added `rust-toolchain.toml`, specifying nightly channel to appease clippy issues in `benches/molecule_benchmark.rs`
 
 Prerequisites
 ---

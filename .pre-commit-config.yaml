@@ -7,7 +7,6 @@ repos:
         -   id: check-merge-conflict
         -   id: check-symlinks
         -   id: check-added-large-files
-            exclude: benches/resources/EFAA.smi.tar.gz
         -   id: check-yaml
         -   id: detect-private-key
         -   id: name-tests-test
@@ -32,3 +31,12 @@ repos:
           pass_filenames: false
           language: system
           types: [ rust ]
+
+        # linting
+        - id: cargo-clippy
+          name: cargo clippy
+          entry: cargo clippy
+          pass_filenames: false
+          language: system
+          types: [ rust ]
+          args: ["--all-targets"]
