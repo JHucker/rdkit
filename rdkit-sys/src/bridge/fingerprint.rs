@@ -14,7 +14,9 @@ pub mod ffi {
             n_bits: usize,
         ) -> SharedPtr<ExplicitBitVect>;
 
-        pub fn explicit_bit_vect_to_binary_vect(fingerprint: &SharedPtr<ExplicitBitVect>) -> UniquePtr<CxxVector<u8>>;
+        pub fn explicit_bit_vect_to_binary_vect(
+            fingerprint: &SharedPtr<ExplicitBitVect>,
+        ) -> UniquePtr<CxxVector<u8>>;
 
         pub fn copy_explicit_bit_vect(
             fingerprint: &SharedPtr<ExplicitBitVect>,

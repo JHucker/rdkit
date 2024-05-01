@@ -1,6 +1,8 @@
 use bitvec::prelude::*;
 use cxx::SharedPtr;
 
+use crate::ROMol;
+
 #[derive(Clone, Debug)]
 pub struct Fingerprint(pub BitVec<u8, bitvec::order::Lsb0>);
 
@@ -25,4 +27,13 @@ impl Fingerprint {
 
         and_ones as f32 / or_ones as f32
     }
+}
+
+pub fn morgan_binary_vect_from_mol(mol: &ROMol, radius: usize, nbits: usize) -> Vec<u8> {
+    assert_eq!(0, nbits % 8, "nbits must be divisible by 8!");
+    let morgan = rdkit_sys::fingerprint_ffi::get_morgan_fingerprint(&mol.ptr, radius, nbits);
+    rdkit_sys::fingerprint_ffi::explicit_bit_vect_to_binary_vect(&morgan)
+        .into_iter()
+        .copied()
+        .collect()
 }

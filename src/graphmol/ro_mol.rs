@@ -86,8 +86,8 @@ impl ROMol {
         RWMol { ptr }
     }
 
-    pub fn fingerprint(&self) -> Fingerprint {
-        let ptr = fingerprint_ffi::fingerprint_mol(&self.ptr);
+    pub fn rdkit_fingerprint(&self) -> Fingerprint {
+        let ptr = fingerprint_ffi::get_rdkit_fingerprint(&self.ptr);
         Fingerprint::new(ptr)
     }
 

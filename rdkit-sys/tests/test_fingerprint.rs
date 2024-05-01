@@ -1,4 +1,3 @@
-
 #[test]
 fn test_fingerprint_to_vec() {
     cxx::let_cxx_string!(smiles = "c1ccccc1CCCCCCCC");
@@ -9,9 +8,6 @@ fn test_fingerprint_to_vec() {
     let bytes: Vec<u64> = bytes.into_iter().map(|x| *x).collect();
     assert_eq!(bytes.len(), 32);
 }
-
-
-
 
 #[test]
 fn test_fingerprint_to_binary_text() {
@@ -30,6 +26,9 @@ fn test_fingerprint_to_binary_text() {
     cxx::let_cxx_string!(smiles = "CCO");
     let mol = rdkit_sys::ro_mol_ffi::smiles_to_mol(&smiles).unwrap();
     let fingerprint = rdkit_sys::fingerprint_ffi::get_morgan_fingerprint(&mol, 2, 2048);
-    let res: Vec<u8> =  rdkit_sys::fingerprint_ffi::explicit_bit_vect_to_binary_vect(&fingerprint).into_iter().copied().collect();
+    let res: Vec<u8> = rdkit_sys::fingerprint_ffi::explicit_bit_vect_to_binary_vect(&fingerprint)
+        .into_iter()
+        .copied()
+        .collect();
     assert_eq!(expected, res);
 }
