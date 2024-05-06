@@ -1,6 +1,6 @@
 use std::collections::HashMap;
 
-use rdkit::{Properties, ROMol};
+use rdkit::{get_exact_molecular_weight, Properties, ROMol};
 
 #[test]
 fn test_a_thing() {
@@ -8,6 +8,14 @@ fn test_a_thing() {
     let properties = Properties::new();
     let computed: HashMap<String, f64> = properties.compute_properties(&mol);
     assert_eq!(*computed.get("NumAtoms").unwrap(), 19.0);
+}
+
+#[test]
+fn test_get_exact_molecular_weight() {
+    let smiles = "CCOC(=O)C(C)(C)OC1=CC=C(C=C1)Cl.CO.C1=CC(=CC=C1C(=O)N[C@@H](CCC(=O)O)C(=O)O)NCC2=CN=C3C(=N2)C(=O)NC(=N3)N";
+    let romol = ROMol::from_smiles(smiles).unwrap();
+    let actual = get_exact_molecular_weight(&romol);
+    assert_eq!(actual, 715.2368680959999)
 }
 
 #[test]

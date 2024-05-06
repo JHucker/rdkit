@@ -14,6 +14,10 @@ impl Default for Properties {
     }
 }
 
+pub fn get_exact_molecular_weight(ro_mol: &ROMol) -> f64 {
+    return rdkit_sys::descriptors_ffi::get_exact_molecular_weight(&ro_mol.ptr);
+}
+
 impl Properties {
     pub fn new() -> Self {
         Properties {
