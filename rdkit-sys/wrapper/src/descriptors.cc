@@ -1,10 +1,15 @@
 #include "rust/cxx.h"
+#include <GraphMol/Descriptors/MolDescriptors.h>
 #include <GraphMol/Descriptors/Property.h>
 #include <GraphMol/ROMol.h>
 
 
 namespace RDKit {
     using Descriptors::Properties;
+
+    double get_exact_molecular_weight(const std::shared_ptr<ROMol> &mol) {
+        return RDKit::Descriptors::calcExactMW(*mol);
+    }
 
     std::shared_ptr<Properties> new_properties() {
         return std::shared_ptr<Properties>(new Properties());

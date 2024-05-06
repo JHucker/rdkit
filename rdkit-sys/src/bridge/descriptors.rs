@@ -7,6 +7,8 @@ pub mod ffi {
         pub type ROMol = crate::ro_mol_ffi::ROMol;
         pub type Properties;
 
+        pub fn get_exact_molecular_weight(mol: &SharedPtr<ROMol>) -> f64;
+
         pub fn new_properties() -> SharedPtr<Properties>;
         pub fn get_property_names(
             properties: &SharedPtr<Properties>,

@@ -1,6 +1,14 @@
 use cxx::let_cxx_string;
 
 #[test]
+fn test_get_exact_molecular_weight() {
+    let_cxx_string!(smiles = "c1ccccc1C(=O)NC");
+    let mol = rdkit_sys::ro_mol_ffi::smiles_to_mol(&smiles).unwrap();
+    let weight = rdkit_sys::descriptors_ffi::get_exact_molecular_weight(&mol);
+    assert_eq!(weight, 135.068413908)
+}
+
+#[test]
 fn test_descriptors() {
     let_cxx_string!(smiles = "c1ccccc1C(=O)NC");
     let mol = rdkit_sys::ro_mol_ffi::smiles_to_mol(&smiles).unwrap();
