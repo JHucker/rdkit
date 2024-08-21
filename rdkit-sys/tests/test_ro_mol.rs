@@ -1,5 +1,3 @@
-use rdkit_sys::ro_mol_ffi::mol_to_smiles;
-
 #[test]
 fn test_ro_mol() {
     cxx::let_cxx_string!(smiles = "c1ccccc1CCCCCCCC");
@@ -135,5 +133,13 @@ fn mol_to_smiles_failure_test() {
     // - debian bookworm, librdkit-dev 202209.3-1
     cxx::let_cxx_string!(smiles = r"CCOC(=O)/C=S(/c1ccc(C(F)(F)F)cc1)=C1/C=C(\C)CCC1=O");
     let romol = rdkit_sys::ro_mol_ffi::smiles_to_mol(&smiles).unwrap();
-    assert!(mol_to_smiles(&romol).is_err())
+    assert!(rdkit_sys::ro_mol_ffi::mol_to_smiles(&romol).is_err())
+}
+
+#[test]
+fn mol_to_molblock_test() {
+    cxx::let_cxx_string!(smiles = "CC");
+    let romol = rdkit_sys::ro_mol_ffi::smiles_to_mol(&smiles).unwrap();
+    let molblock = rdkit_sys::ro_mol_ffi::mol_to_molblock(&romol);
+    assert_eq!(molblock, "\n     RDKit          2D\n\n  2  1  0  0  0  0  0  0  0  0999 V2000\n    0.0000    0.0000    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    1.2990    0.7500    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n  1  2  1  0\nM  END\n");
 }
