@@ -8,6 +8,7 @@ repos:
         -   id: check-symlinks
         -   id: check-added-large-files
         -   id: check-yaml
+            exclude: ".clang-format"
         -   id: detect-private-key
         -   id: name-tests-test
         -   id: end-of-file-fixer
@@ -16,7 +17,16 @@ repos:
 
   -   repo: local
       hooks:
-        # formatting
+        # c++ formatting
+        - id: clang-format
+          name: clang-format
+          entry: clang-format
+          pass_filenames: true
+          language: system
+          types: [ c++ ]
+          args: [ "-i" ]
+
+        # rust formatting
         - id: cargo-format
           name: cargo +nightly fmt
           entry: cargo +nightly fmt
