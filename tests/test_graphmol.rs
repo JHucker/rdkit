@@ -378,6 +378,7 @@ fn test_as_random_smiles_vec() {
     assert!(smiles_set.len() > 1);
 }
 
+#[test]
 fn mol_to_molblock_test() {
     let smiles = "CC";
     let romol = ROMol::from_smiles(&smiles).unwrap();
