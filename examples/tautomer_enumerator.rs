@@ -9,6 +9,6 @@ fn main() {
         println!("{}", t.as_smiles().unwrap());
     }
 
-    let canonical_mol = enumerator.canonicalize(&mol);
+    let canonical_mol = enumerator.canonicalize(&mol).unwrap();
     println!("{}", canonical_mol.as_smiles().unwrap());
 }

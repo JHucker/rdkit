@@ -10,6 +10,8 @@ pub struct ROMol {
     pub(crate) ptr: cxx::SharedPtr<ro_mol_ffi::ROMol>,
 }
 
+unsafe impl Send for ROMol {}
+
 #[derive(Debug, PartialEq, thiserror::Error)]
 pub enum ROMolError {
     #[error("could not convert smiles to romol (nullptr)")]
@@ -79,6 +81,10 @@ impl ROMol {
         (0..num_smiles)
             .map(|_| self.as_smiles_with_params(&params).unwrap())
             .collect()
+    }
+
+    pub fn to_molblock(&self) -> String {
+        ro_mol_ffi::mol_to_molblock(&self.ptr)
     }
 
     pub fn as_rw_mol(&self, quick_copy: bool, conf_id: i32) -> RWMol {
