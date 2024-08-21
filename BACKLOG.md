@@ -8,7 +8,7 @@ I want a bridge like:
         struct SharedROMol {
             s: SharedPtr<ROMol>
         }
-    
+
         unsafe extern "C++" {
             pub fn tautomer_enumerator_result_tautomers(
                 tautomer_enumerator_result: SharedPtr<TautomerEnumeratorResult>

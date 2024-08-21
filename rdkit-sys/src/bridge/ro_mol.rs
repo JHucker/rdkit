@@ -20,6 +20,7 @@ pub mod ffi {
         pub type ROMol;
         pub type ExplicitBitVect = crate::fingerprint_ffi::ExplicitBitVect;
         pub type SmilesParserParams;
+        pub type SmilesWriteParams;
         pub type Atom;
         pub type HybridizationType;
 
@@ -41,7 +42,22 @@ pub mod ffi {
         );
         pub fn smiles_parser_params_get_sanitize(ptr: &SharedPtr<SmilesParserParams>) -> bool;
 
-        pub fn mol_to_smiles(mol: &SharedPtr<ROMol>) -> String;
+        pub fn mol_to_smiles(mol: &SharedPtr<ROMol>) -> Result<String>;
+
+        pub fn new_smiles_write_params() -> SharedPtr<SmilesWriteParams>;
+
+        pub fn smiles_write_params_set_do_random(
+            ptr: &SharedPtr<SmilesWriteParams>,
+            do_random: bool,
+        );
+        pub fn smiles_write_params_set_rooted_at_atom(
+            ptr: &SharedPtr<SmilesWriteParams>,
+            rooted_at_atom: i32,
+        );
+        pub fn mol_to_smiles_with_params(
+            mol: &SharedPtr<ROMol>,
+            params: &SharedPtr<SmilesWriteParams>,
+        ) -> Result<String>;
 
         pub fn detect_chemistry_problems(
             mol: &SharedPtr<ROMol>,
