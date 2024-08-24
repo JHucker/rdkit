@@ -12,7 +12,6 @@ members = ["rdkit-sys"]
 
 [dependencies]
 bitvec = "1"
-byteorder = "1.4.3"
 cxx = "1"
 flate2 = "1"
 log = "0.4"

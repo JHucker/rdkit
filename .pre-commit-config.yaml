@@ -50,3 +50,12 @@ repos:
           language: system
           types: [ rust ]
           args: ["--all-targets"]
+
+        # Check for unused deps
+        - id: cargo-machete
+          name: cargo machete
+          entry: cargo machete
+          pass_filenames: false
+          language: system
+          require_serial: true
+          types: [ rust ]
