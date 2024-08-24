@@ -17,6 +17,8 @@ Comparison to Original Repo
     - Added `.pre-commit-config.yaml`
     - Added `rust-toolchain.toml`, specifying nightly channel to appease clippy issues in `benches/molecule_benchmark.rs`
 
+Conda rdkit compatability, for rdkit-rs 0.4.11, rdkit 2024.03.5 is incompatible (build will fail). 2024.03-1 -> 2024.03.4 seem to work.
+
 Prerequisites
 ---
 
